@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Swagger UI</title>
+    <!-- Swagger UI 스타일시트 -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.53.0/swagger-ui.css"/>
+</head>
+<body>
+<div id="swagger-ui"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.53.0/swagger-ui-bundle.js"></script>
+<script>
+    const ui = SwaggerUIBundle({
+        url: "swagger.json", // 사용자가 작성한 Swagger 문서 경로로 수정
+        dom_id: '#swagger-ui',
+        // ... 다른 옵션들 ...
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,1694 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/user/{id}": {
+      "get": {
+        "operationId": "UserController_getUserByUserId",
+        "summary": "특정 사용자 정보 조회",
+        "description": "특정 사용자의 정보 조회",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "조회할 사용자의 ID",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공적으로 사용자 정보를 가져옴",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "operationId": "UserController_update",
+        "summary": "회원 정보 수정",
+        "description": "사용자의 정보를 수정합니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "사용자 PK",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "수정할 사용자 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "userId": 1,
+                  "name": "메밀",
+                  "email": "stringbuckwheat@gmail.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "성공적으로 사용자 정보 수정 수행",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "operationId": "UserController_delete",
+        "summary": "(인증) 회원 탈퇴",
+        "description": "사용자를 삭제합니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "description": "삭제할 사용자의 ID",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "사용자 삭제 성공"
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/user/username/check": {
+      "get": {
+        "operationId": "UserController_hasSameUsername",
+        "summary": "아이디 중복 검사",
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "in": "query",
+            "description": "중복 검사를 수행할 아이디",
+            "schema": {
+              "example": "stringbuckwheat"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공적으로 아이디 중복 검사 수행",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "username": "stringbuckwheat",
+                    "message": "사용할 수 없습니다"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/user/username/{username}": {
+      "get": {
+        "operationId": "UserController_searchByUsernameExceptMe",
+        "summary": "(인증) username으로 회원 정보 검색, 나를 제외",
+        "description": "채팅방 추가용 회원 검색",
+        "parameters": [
+          {
+            "name": "username",
+            "required": true,
+            "in": "path",
+            "description": "검색할 username",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공적으로 회원 검색 수행",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": [
+                    {
+                      "userId": 1,
+                      "username": "stringbuckwheat",
+                      "name": "메밀쓰",
+                      "email": "stringbuckwheat@gmail.com",
+                      "provider": null
+                    },
+                    {
+                      "userId": 2,
+                      "username": "stringbuckwheat2",
+                      "name": "구구",
+                      "email": "stringbuckwheat@gmail.com",
+                      "provider": null
+                    },
+                    {
+                      "userId": 3,
+                      "username": "stringbuckwheat3",
+                      "name": "장군이",
+                      "email": "stringbuckwheat3@gmail.com",
+                      "provider": null
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/user": {
+      "post": {
+        "operationId": "UserController_register",
+        "summary": "회원가입",
+        "description": "새로운 사용자를 등록합니다.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "등록할 사용자 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "username": "stringbuckwheat4",
+                  "name": "반가워요",
+                  "email": "stringbuckwheat4@gmail.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "성공적으로 회원가입 수행",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "아이디 중복, 회원가입 불가",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "message": "같은 아이디 있음",
+                    "error": "Conflict",
+                    "statusCode": 409
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/user/{id}/password": {
+      "post": {
+        "operationId": "UserController_verifyUserByPassword",
+        "summary": "(인증) 비밀번호 변경 전 비밀번호 확인",
+        "description": "비밀번호 변경 전 현재 비밀번호를 확인합니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "사용자 PK",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "비밀번호 확인을 수행할 사용자 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "password": "password1234",
+                  "userId": 1
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/user/{userId}/password": {
+      "put": {
+        "operationId": "UserController_changePassword",
+        "summary": "(인증) 비밀번호 변경",
+        "description": "사용자의 비밀번호를 변경합니다.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "비밀번호 변경을 수행할 사용자 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "password": "changepw123!",
+                  "userId": 111
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/board": {
+      "get": {
+        "operationId": "BoardController_getAll",
+        "summary": "전체 게시글 목록 조회",
+        "description": "등록된 모든 게시글 조회 (목록)",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success: 전체 게시글 목록",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoardList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Boards"
+        ]
+      },
+      "post": {
+        "operationId": "BoardController_create",
+        "summary": "게시글 작성",
+        "description": "새로운 게시글을 작성합니다.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "게시글 작성에 필요한 데이터",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BoardDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "방금 작성한 게시글 PK",
+            "schema": {
+              "example": 11
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Boards"
+        ]
+      }
+    },
+    "/board/popular": {
+      "get": {
+        "operationId": "BoardController_getPopular",
+        "summary": "인기 게시글 목록 조회",
+        "description": "좋아요 순 정렬, 최대 5개",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "성공적으로 인기 게시글 목록을 가져옴",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoardList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Boards"
+        ]
+      }
+    },
+    "/board/{id}": {
+      "get": {
+        "operationId": "BoardController_getOne",
+        "summary": "게시글 상세 정보 조회",
+        "description": "특정 게시글의 상세 정보를 조회합니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "게시글 식별자",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공적으로 게시글 상세 정보를 가져옴",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardDetail"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Boards"
+        ]
+      },
+      "put": {
+        "operationId": "BoardController_update",
+        "summary": "게시글 수정",
+        "description": "기존 게시글을 수정합니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "게시글 식별자",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "게시글 수정에 필요한 데이터",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBoard"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "게시글이 성공적으로 수정됨",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardDetail"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Boards"
+        ]
+      },
+      "delete": {
+        "operationId": "BoardController_remove",
+        "summary": "게시글 삭제",
+        "description": "게시글을 삭제합니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "게시글 식별자",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "게시글이 성공적으로 삭제됨"
+          }
+        },
+        "tags": [
+          "Boards"
+        ]
+      }
+    },
+    "/board/{id}/verify": {
+      "post": {
+        "operationId": "BoardController_verifyAnonymous",
+        "summary": "(수정, 삭제 전) 익명 게시글의 권한 확인",
+        "description": "익명 게시글의 권한을 확인합니다.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "익명 게시글 확인에 필요한 데이터",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "익명 게시글 확인 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Boards"
+        ]
+      }
+    },
+    "/board/{id}/comment": {
+      "put": {
+        "operationId": "BoardController_markCommentAsRead",
+        "summary": "댓글 읽음 표시",
+        "description": "해당 게시글에 대한 댓글을 읽음 처리합니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "게시글 식별자",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "댓글이 읽음으로 표시됨",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": 1
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Boards"
+        ]
+      }
+    },
+    "/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "summary": "사용자 로그인",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "사용자 로그인 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "로그인 성공",
+            "schema": {
+              "example": {
+                "userId": 1,
+                "username": "stringbuckwheat",
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthUser"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "아이디, 패스워드 틀림",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "message": "비번 틀림",
+                    "error": "Unauthorized",
+                    "statusCode": 401
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentications"
+        ]
+      }
+    },
+    "/auth/google/callback": {
+      "post": {
+        "operationId": "AuthController_googleAuthRedirect",
+        "summary": "Google 로그인 콜백 엔드포인트",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Google 로그인 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+                    "userId": 4,
+                    "name": "김메밀"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentications"
+        ]
+      }
+    },
+    "/board/{boardId}/like": {
+      "post": {
+        "operationId": "LikeController_like",
+        "summary": "(인증) 좋아요 추가, 취소",
+        "description": "이미 좋아요한 상태에선 취소, 하지 않은 상태에선 좋아요 추가",
+        "parameters": [
+          {
+            "name": "boardId",
+            "required": true,
+            "in": "path",
+            "description": "게시글 식별자",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "좋아요 추가 정보",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LikeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "좋아요 추가/삭제 성공",
+            "schema": {
+              "example": 1
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "해당 글이나 사용자 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "message": "사용자나 게시글 없음",
+                    "error": "Not Found",
+                    "statusCode": 404
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Likes"
+        ]
+      }
+    },
+    "/comment": {
+      "post": {
+        "operationId": "CommentController_create",
+        "summary": "댓글 작성",
+        "description": "회원, 비회원 모두 작성 가능",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "댓글 작성 데이터",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "댓글 작성 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Comments"
+        ]
+      }
+    },
+    "/comment/{id}/verify": {
+      "post": {
+        "operationId": "CommentController_verify",
+        "summary": "익명 회원의 댓글 수정/삭제 전 권한 확인",
+        "description": "패스워드 일치 여부 검사",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "코멘트 PK",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "권한 검사용 데이터",
+          "content": {
+            "application/json": {
+              "schema": {
+                "example": {
+                  "password": "submitPw1234",
+                  "commentId": 1
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "commentId": 1,
+                    "verify": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "비밀번호 틀림",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "statusCode": 401,
+                    "message": "비밀번호 불일치",
+                    "error": "Unauthorized"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "그런 댓글 없음",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "statusCode": 404,
+                    "message": "그런 댓글 없음",
+                    "error": "Not Found"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Comments"
+        ]
+      }
+    },
+    "/comment/{id}": {
+      "delete": {
+        "operationId": "CommentController_delete",
+        "summary": "댓글 삭제",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "코멘트 PK",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "댓글 삭제 성공"
+          }
+        },
+        "tags": [
+          "Comments"
+        ]
+      }
+    },
+    "/alarm/user/{id}/alarm/comment": {
+      "get": {
+        "operationId": "AlarmController_getCommentAlarm",
+        "summary": "(인증) 인증된 사용자의 미확인 댓글 알림",
+        "description": "브라우저 새로고침 시 지난 댓글 알림을 API로 받아옵니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "사용자 PK",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공적으로 댓글 알림(들)을 가져옴",
+            "schema": {
+              "example": [
+                null
+              ]
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommentCreatedAlarm"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Alarms"
+        ]
+      }
+    },
+    "/alarm/user/{id}/alarm/chat": {
+      "get": {
+        "operationId": "AlarmController_getChatAlarm",
+        "summary": "(인증) 인증된 사용자의 미확인 채팅 알림",
+        "description": "브라우저 새로고침 시 지난 채팅 알림을 API로 받아옵니다.",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "사용자 PK",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "성공적으로 채팅 알림(들)을 가져옴",
+            "schema": {
+              "example": [
+                null
+              ]
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommentCreatedAlarm"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "tags": [
+          "Alarms"
+        ]
+      }
+    },
+    "/chat": {
+      "get": {
+        "operationId": "ChatController_getAllByUserId",
+        "summary": "(인증) 한 사용자의 채팅 목록",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "채팅 목록 가져오기 성공",
+            "schema": {
+              "example": [
+                {
+                  "chatRoomId": 1,
+                  "title": "메밀, 구구의 채팅방",
+                  "participants": 2
+                },
+                {
+                  "chatRoomId": 2,
+                  "title": "메밀, 장군의 채팅방",
+                  "participants": 2
+                },
+                {
+                  "chatRoomId": 3,
+                  "title": "메밀, 구구, 장군",
+                  "participants": 3
+                }
+              ]
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatRoom"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Chats"
+        ]
+      },
+      "post": {
+        "operationId": "ChatController_createOrFindChatRoomByUserId",
+        "summary": "(인증) 사용자 PK로 채팅방 조회",
+        "description": "주어진 사용자 PK들로 이루어진 채팅방이 이미 존재하면 조회하고, 없으면 만들어서 리턴합니다.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "User 식별자 배열",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "채팅방 조회 또는 생성에 성공하면 채팅방 정보를 반환합니다.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatRoomDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Chats"
+        ]
+      }
+    },
+    "/chat/message/{messageId}": {
+      "put": {
+        "operationId": "ChatController_markedMessageAsRead",
+        "summary": "(인증) 채팅 메시지 읽음 처리",
+        "description": "해당 messageId 이전의 글을 모두 읽음 처리",
+        "parameters": [
+          {
+            "name": "messageId",
+            "required": true,
+            "in": "path",
+            "description": "메시지 식별자",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "읽음 처리 성공 시 해당 메시지 ID를 반환",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Chats"
+        ]
+      }
+    },
+    "/search": {
+      "get": {
+        "operationId": "SearchController_search",
+        "summary": "전체 글 검색",
+        "description": "문자열로 해당 내용이 포함된 글 검색(게시글(제목, 내용, 작성자), 댓글(내용, 작성자), 유저(아이디, 닉네임))",
+        "parameters": [
+          {
+            "name": "query",
+            "required": true,
+            "in": "query",
+            "description": "검색어",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "boards": [
+                      {
+                        "boardId": 2,
+                        "title": "글 작성 테스트22222",
+                        "content": "글 내용 글 내용 글 내용",
+                        "name": "memil",
+                        "username": ""
+                      },
+                      {
+                        "boardId": 5,
+                        "title": "익명 글",
+                        "content": "익명글 내용",
+                        "name": "익명의 작성자",
+                        "username": ""
+                      }
+                    ],
+                    "comments": [
+                      {
+                        "commentId": 4,
+                        "content": "회원 댓글 테스트1",
+                        "name": "메밀쓰",
+                        "username": "stringbuckwheat"
+                      },
+                      {
+                        "commentId": 21,
+                        "content": "대댓글 테스트",
+                        "name": "메밀쓰",
+                        "username": "stringbuckwheat"
+                      }
+                    ],
+                    "users": []
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Search"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "웅글웅글",
+    "description": "채팅 + 게시판",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "number",
+            "example": 1,
+            "description": "User 테이블 식별자"
+          },
+          "username": {
+            "type": "string",
+            "example": "stringbuckwheat",
+            "description": "아이디"
+          },
+          "name": {
+            "type": "string",
+            "example": "메밀",
+            "description": "닉네임"
+          },
+          "email": {
+            "type": "string",
+            "example": "stringbuckwheat@gmail.com",
+            "description": "이메일"
+          },
+          "provider": {
+            "type": "string",
+            "example": null,
+            "description": "소셜 로그인 공급자(null일시 로컬 회원가입)",
+            "nullable": true
+          }
+        },
+        "required": [
+          "userId",
+          "username",
+          "name",
+          "email",
+          "provider"
+        ]
+      },
+      "BoardList": {
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "number",
+            "description": "게시글 식별자",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "게시글 제목입니다"
+          },
+          "name": {
+            "type": "string",
+            "description": "작성자 이름",
+            "example": "메밀"
+          },
+          "userId": {
+            "type": "number",
+            "description": "작성자 식별자 (null인 경우 익명 사용자)",
+            "example": 1,
+            "nullable": true
+          },
+          "isMember": {
+            "type": "boolean",
+            "description": "회원 여부",
+            "example": true
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "게시글 작성일",
+            "example": "2024-02-01"
+          },
+          "hits": {
+            "type": "number",
+            "description": "조회 수",
+            "example": 100
+          },
+          "렬": {
+            "type": "object",
+            "description": "좋아요 수",
+            "example": 10
+          }
+        },
+        "required": [
+          "boardId",
+          "title",
+          "name",
+          "userId",
+          "isMember",
+          "createdAt",
+          "hits",
+          "렬"
+        ]
+      },
+      "CommentResponseDto": {
+        "type": "object",
+        "properties": {
+          "commentId": {
+            "type": "number",
+            "example": 1,
+            "description": "댓글 PK"
+          },
+          "content": {
+            "type": "string",
+            "example": "댓글 작성 테스트!",
+            "description": "댓글 내용"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2024-02-02T08:44:20.050Z",
+            "description": "작성 일시"
+          },
+          "name": {
+            "type": "string",
+            "example": "익명 메밀",
+            "description": "닉네임"
+          },
+          "userId": {
+            "type": "number",
+            "example": null,
+            "description": "유저 PK",
+            "nullable": true
+          },
+          "replies": {
+            "description": "대댓글",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "commentId",
+          "content",
+          "createdAt",
+          "name",
+          "userId",
+          "replies"
+        ]
+      },
+      "BoardDetail": {
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "number",
+            "description": "게시글 식별자",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "오늘의 일기 🌈"
+          },
+          "name": {
+            "type": "string",
+            "description": "작성자 이름",
+            "example": "구구"
+          },
+          "userId": {
+            "type": "number",
+            "description": "작성자 식별자 (null인 경우 익명 사용자)",
+            "example": 2,
+            "nullable": true
+          },
+          "isMember": {
+            "type": "boolean",
+            "description": "회원 여부",
+            "example": true
+          },
+          "content": {
+            "type": "string",
+            "description": "게시글 내용",
+            "example": "오늘은 새로운 모험의 시작이에요! 🚀"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "게시글 작성일",
+            "example": "2024-02-01 12:34:56"
+          },
+          "hits": {
+            "type": "number",
+            "description": "조회 수",
+            "example": 100
+          },
+          "likes": {
+            "type": "number",
+            "description": "좋아요 수",
+            "example": 10
+          },
+          "comments": {
+            "description": "댓글 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CommentResponseDto"
+            }
+          }
+        },
+        "required": [
+          "boardId",
+          "title",
+          "name",
+          "userId",
+          "isMember",
+          "content",
+          "createdAt",
+          "hits",
+          "likes",
+          "comments"
+        ]
+      },
+      "BoardDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "우리 집 고양이들의 일상 🐾"
+          },
+          "content": {
+            "type": "string",
+            "description": "게시글 내용",
+            "example": "고양이들이 즐겁게 놀고 있는 모습을 공유해요! 😺"
+          },
+          "userId": {
+            "type": "number",
+            "description": "작성자 식별자 (nullable)",
+            "example": null,
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "작성자 닉네임 (nullable)",
+            "example": "CatLover",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "description": "게시글 비밀번호 (nullable)",
+            "example": "mypassword123",
+            "nullable": true
+          }
+        },
+        "required": [
+          "title",
+          "content",
+          "userId",
+          "name",
+          "password"
+        ]
+      },
+      "VerifyRequest": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "게시글 비밀번호",
+            "example": "mypassword123"
+          },
+          "boardId": {
+            "type": "number",
+            "description": "게시글 식별자",
+            "example": 11
+          }
+        },
+        "required": [
+          "password",
+          "boardId"
+        ]
+      },
+      "VerifyResponse": {
+        "type": "object",
+        "properties": {
+          "boardId": {
+            "type": "number",
+            "description": "게시글 식별자",
+            "example": 11
+          },
+          "verify": {
+            "type": "boolean",
+            "description": "본인 확인 성공 여부",
+            "example": true
+          }
+        },
+        "required": [
+          "boardId",
+          "verify"
+        ]
+      },
+      "UpdateBoard": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "게시글 제목",
+            "example": "우리 집 고양이들의 일상 🐾"
+          },
+          "content": {
+            "type": "string",
+            "description": "게시글 내용",
+            "example": "고양이들이 즐겁게 놀고 있는 모습을 공유해요! 😺"
+          },
+          "userId": {
+            "type": "number",
+            "description": "작성자 식별자 (nullable)",
+            "example": null,
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "작성자 닉네임 (nullable)",
+            "example": "CatLover",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "description": "게시글 비밀번호 (nullable)",
+            "example": "mypassword123",
+            "nullable": true
+          },
+          "boardId": {
+            "type": "number",
+            "description": "게시글 식별자",
+            "example": 1
+          }
+        },
+        "required": [
+          "title",
+          "content",
+          "userId",
+          "name",
+          "password",
+          "boardId"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "stringbuckwheat",
+            "description": "아이디"
+          },
+          "password": {
+            "type": "string",
+            "example": "password1234",
+            "description": "비밀번호"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "AuthUser": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "description": "Access Token"
+          },
+          "userId": {
+            "type": "number",
+            "example": 1,
+            "description": "User 식별자"
+          },
+          "username": {
+            "type": "string",
+            "example": "stringbuckwheat",
+            "description": "아이디"
+          },
+          "name": {
+            "type": "string",
+            "example": "메밀",
+            "description": "닉네임"
+          },
+          "alarms": {
+            "type": "object",
+            "description": "기존 댓글/채팅 알림",
+            "example": {
+              "unCheckedComments": [
+                {
+                  "userId": 1,
+                  "boardId": 2,
+                  "title": "웅글웅글은 무슨 뜻인가요?",
+                  "commentId": 3,
+                  "content": "GPT가 지어줬대요",
+                  "message": "새로운 댓글이 등록되었습니다.",
+                  "createdAt": "2024-02-01T12:34:56Z"
+                }
+              ],
+              "unReadMessages": [
+                {
+                  "userMessageReadId": 1,
+                  "chatRoomId": 2,
+                  "chatRoomName": "구구, 메밀",
+                  "messageId": 3,
+                  "message": "메밀아 안녕?",
+                  "createdAt": "2024-02-01T12:34:56Z"
+                }
+              ]
+            }
+          }
+        },
+        "required": [
+          "accessToken",
+          "userId",
+          "username",
+          "name",
+          "alarms"
+        ]
+      },
+      "LikeDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "number",
+            "example": 1,
+            "description": "사용자 PK"
+          },
+          "boardId": {
+            "type": "number",
+            "example": 1,
+            "description": "게시글 PK"
+          }
+        },
+        "required": [
+          "userId",
+          "boardId"
+        ]
+      },
+      "CommentRequest": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "number",
+            "example": 1,
+            "description": "유저 PK / null일시 비회원",
+            "nullable": true
+          },
+          "boardId": {
+            "type": "number",
+            "example": 1,
+            "description": "게시글 PK"
+          },
+          "content": {
+            "type": "string",
+            "example": "댓글 작성 테스트!",
+            "description": "댓글 내용"
+          },
+          "name": {
+            "type": "string",
+            "example": "익명메밀",
+            "description": "닉네임 (null일시 회원)",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "example": "anonymouspw123",
+            "description": "비밀번호 (null일시 회원)",
+            "nullable": true
+          }
+        },
+        "required": [
+          "userId",
+          "boardId",
+          "content",
+          "name",
+          "password"
+        ]
+      },
+      "CommentCreatedAlarm": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "number",
+            "example": 1,
+            "description": "User 식별자"
+          },
+          "boardId": {
+            "type": "number",
+            "example": 2,
+            "description": "새 댓글이 달린 글의 식별자"
+          },
+          "title": {
+            "type": "string",
+            "example": "웅글웅글은 무슨 뜻인가요?",
+            "description": "새 댓글이 달린 글의 제목"
+          },
+          "commentId": {
+            "type": "number",
+            "example": "3",
+            "description": "댓글 식별자"
+          },
+          "content": {
+            "type": "string",
+            "example": "GPT가 지어줬대요.",
+            "description": "댓글 내용"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2024-02-01T12:34:56Z",
+            "description": "댓글 작성 일시"
+          },
+          "message": {
+            "type": "string",
+            "example": "새로운 댓글이 작성되었습니다!",
+            "description": "댓글 작성 메시지"
+          }
+        },
+        "required": [
+          "userId",
+          "boardId",
+          "title",
+          "commentId",
+          "content",
+          "createdAt",
+          "message"
+        ]
+      },
+      "ChatRoom": {
+        "type": "object",
+        "properties": {}
+      },
+      "ChatRoomDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "구구, 메밀",
+            "description": "채팅방 이름"
+          },
+          "chatRoomId": {
+            "type": "number",
+            "example": 1,
+            "description": "채팅방 식별자"
+          },
+          "participants": {
+            "type": "number",
+            "example": 2,
+            "description": "참여 인원"
+          },
+          "messages": {
+            "description": "메시지들",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "title",
+          "chatRoomId",
+          "participants",
+          "messages"
+        ]
+      }
+    }
+  }
+}
